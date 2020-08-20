@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <title>Rock Paper Scissors</title>
+  </head>
+  <body>
+    <script>
+        let choices = ['rock', 'paper', 'scissors'];
+
+        function computerPlay() {
+            let computerSelection = choices[Math.floor(Math.random() * choices.length)];
+            return computerSelection;
+        }
+
+        function playRound(playerSelection, computerSelection) {
+            
+            // Tie
+            if (playerSelection == computerSelection) {
+                return `It's a Tie. ${playerSelection} ties with ${computerSelection}`;
+            }
+            
+            // Player Loses
+            else if ((playerSelection == 'rock' && computerSelection == 'paper') || (playerSelection == 'paper' && computerSelection == 'scissors') || (playerSelection == 'scissors' && computerSelection == 'rock')) {
+                return `You Lose. ${computerSelection} beats  ${playerSelection}.`;
+            }
+            
+            // Player Wins
+            else {
+                return `You Win. ${playerSelection} beats ${computerSelection}`;
+            }
+        }
+       
+        function game() {
+            for (i = 1; i <= 5; i++) {
+                let playerSelection;
+                // debugger;
+                while (!(playerSelection == 'rock' || playerSelection == 'paper' || playerSelection == 'scissors')) {
+                    playerSelection = prompt("Please choose: 'rock', 'paper', 'scissors' ").toLowerCase();
+                }
+                console.log(playRound(playerSelection, computerPlay()));
+            }
+        }
+        
+        game();
+        
+    </script>
+  </body>
+</html>
