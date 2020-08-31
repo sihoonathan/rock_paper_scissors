@@ -4,9 +4,113 @@
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Rock Paper Scissors</title>
+    <link rel="stylesheet" href="style.css">
   </head>
   <body>
+      <button id="playAgain">
+        Play Again
+      </button>
+    
+    <section id="wrapper">
+      <header id="header">
+        Let's play some Rock, Paper, Scissors! Whoever wins the five rounds will be a winner!
+      </header>
+      <section id="main">
+        <div id="player">
+          <img class="scoreImg" src="img/paper.png"/>
+          <p>Player Score: <span id="playerScore">0</span></p>
+        </div>
+        <div id="computer">
+          <img class="scoreImg" src="img/paper.png"/>
+          <p>Computer Score: <span id="computerScore">0</span></p>
+        </div>
+        <div id="choice">
+          <button id="rock"><img src="img/rock.png"></button>
+          <button id="paper"><img src="img/paper.png"></button>
+          <button id="scissors"><img src="img/scissors.png"></button>
+        </div>
+      </section>
+    </section>
+    
+    
     <script>
+        let won = false;
+        let body = document.body;
+        const initialHeaderVal = document.querySelector('#header').innerHTML;
+
+        addPadding(body);
+
+        function addPadding(element) {
+            if (element.tagName != 'BUTTON' && element.tagName != 'IMG')
+            element.classList.add('padding');
+            if (element.children.length > 0) {
+                const childElements = element.children;
+                for (let each of childElements) {
+                    addPadding(each);
+                }
+            }
+        }
+
+        let buttons = document.querySelectorAll('button');
+        
+        buttons.forEach(button => {
+            button.addEventListener('mouseenter', addPointerHover);
+            button.addEventListener('mouseleave', removeHover);
+            button.addEventListener('transitionend', removeTransition);
+            button.addEventListener('click', enlargeBtn);
+            button.addEventListener('click', (e) => {
+                let playerChoice = e.target.id;
+                if (playerChoice != 'playAgain' && won == false) {
+                    document.querySelector('#header').innerHTML = playRound(playerChoice, computerPlay());
+                    checkWinner();
+                }
+            });
+        });
+
+        let playAgainBtn = document.querySelector('#playAgain');
+        
+        playAgainBtn.addEventListener('click', (e) => {
+            document.querySelector('#header').innerHTML = initialHeaderVal;
+            document.querySelector('#playerScore').innerHTML = 0;
+            document.querySelector('#computerScore').innerHTML = 0;
+            won = false;
+            playAgainBtn.style.visibility = 'hidden';
+        });
+        
+        function checkWinner() {
+            if (document.querySelector('#playerScore').textContent == 5) {
+                document.querySelector('#header').innerHTML = document.querySelector('#header').textContent + "<br><br>Player Wins!";
+                won = true;
+            }
+            else if (document.querySelector('#computerScore').textContent == 5){
+                document.querySelector('#header').innerHTML = document.querySelector('#header').textContent + "<br><br>Computer Wins!";
+                won = true;
+            }
+
+            if (won == true) {
+                document.querySelector('#playAgain').style.visibility = 'visible';
+            }
+        }
+        
+        function removeTransition(e) {
+            if (e.propertyName != 'transform') return;
+            e.target.classList.remove('scale');
+        }
+
+        function addPointerHover(e) {
+            e.target.style.cursor = 'pointer';
+            e.target.classList.add('buttonBorder');
+        }
+
+        function removeHover(e) {
+            e.target.classList.remove('buttonBorder');
+        }
+        
+        function enlargeBtn(e) {
+            e.target.classList.add('scale');
+        }
+        
+      
         let choices = ['rock', 'paper', 'scissors'];
 
         function computerPlay() {
@@ -15,23 +119,27 @@
         }
 
         function playRound(playerSelection, computerSelection) {
-            
-            // Tie
-            if (playerSelection == computerSelection) {
-                return `It's a Tie. ${playerSelection} ties with ${computerSelection}`;
-            }
-            
-            // Player Loses
-            else if ((playerSelection == 'rock' && computerSelection == 'paper') || (playerSelection == 'paper' && computerSelection == 'scissors') || (playerSelection == 'scissors' && computerSelection == 'rock')) {
-                return `You Lose. ${computerSelection} beats  ${playerSelection}.`;
-            }
-            
-            // Player Wins
-            else {
-                return `You Win. ${playerSelection} beats ${computerSelection}`;
+            if (won == false) {
+                // Tie
+                if (playerSelection == computerSelection) {
+                    return `It's a Tie. ${playerSelection} ties with ${computerSelection}`;
+                }
+
+                // Computer Wins
+                else if ((playerSelection == 'rock' && computerSelection == 'paper') || (playerSelection == 'paper' && computerSelection == 'scissors') || (playerSelection == 'scissors' && computerSelection == 'rock')) {
+                    document.querySelector('#computerScore').innerHTML = parseInt(document.querySelector('#computerScore').textContent) + 1 + "";
+
+                    return `You Lose. ${computerSelection} beats  ${playerSelection}.`;
+                }
+
+                // Player Wins
+                else {
+                    document.querySelector('#playerScore').innerHTML = parseInt(document.querySelector('#playerScore').textContent) + 1 + "";
+                    return `You Win. ${playerSelection} beats ${computerSelection}`;
+                }
             }
         }
-       
+
         function game() {
             for (i = 1; i <= 5; i++) {
                 let playerSelection;
@@ -42,9 +150,9 @@
                 console.log(playRound(playerSelection, computerPlay()));
             }
         }
-        
-        game();
-        
+
+        // game();
+    
     </script>
   </body>
 </html>
