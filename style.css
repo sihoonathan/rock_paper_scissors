@@ -68,7 +68,6 @@ body {
     text-align: center;
     display: flex;
     align-items: center;
-    justify-content: center;
     font-family: monospace;
 }
 
@@ -86,6 +85,7 @@ header {
             '. . player player computer computer . .'
             '. . choice choice choice choice . . ';
     /*justify-items: center;*/
+    /*justify-content: center;*/
 }
 
 #player {
